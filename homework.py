@@ -1,4 +1,5 @@
 from dataclasses import asdict, dataclass
+from typing import Dict
 
 
 @dataclass
@@ -23,9 +24,9 @@ class InfoMessage:
 
 class Training:
     """Базовый класс тренировки."""
-    LEN_STEP: float = 0.65
-    M_IN_KM: int = 1000
-    MINUTES_IN_THE_HOUR: int = 60
+    LEN_STEP = 0.65
+    M_IN_KM = 1000
+    MINUTES_IN_THE_HOUR = 60
 
     def __init__(self,
                  action: int,
@@ -61,8 +62,8 @@ class Training:
 
 class Running(Training):
     """Тренировка: бег."""
-    MULTIPLIER_CALORIES: int = 18
-    LINE_SHIFT: int = 20
+    MULTIPLIER_CALORIES = 18
+    LINE_SHIFT = 20
 
     def get_spent_calories(self) -> float:
         return (self.MULTIPLIER_CALORIES * self.get_mean_speed()
@@ -72,8 +73,8 @@ class Running(Training):
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
-    COEFF_CALORIES_SW_1: float = 0.035
-    COEFF_CALORIES_SW_2: float = 0.029
+    COEFF_CALORIES_SW_1 = 0.035
+    COEFF_CALORIES_SW_2 = 0.029
 
     def __init__(self,
                  action: int,
@@ -92,9 +93,9 @@ class SportsWalking(Training):
 
 class Swimming(Training):
     """Тренировка: плавание."""
-    LEN_STEP: float = 1.38
-    COEFF_CALORIES_SWIM_1: float = 1.1
-    COEFF_CALORIES_SWIM_2: int = 2
+    LEN_STEP = 1.38
+    COEFF_CALORIES_SWIM_1 = 1.1
+    COEFF_CALORIES_SWIM_2 = 2
 
     def __init__(self, action: int,
                  duration: float,
@@ -114,12 +115,12 @@ class Swimming(Training):
                 ) * self.COEFF_CALORIES_SWIM_2 * self.weight
 
 
-def read_package(workout_type: str, data: list[int]) -> Training:
+def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    type_of_training = {'SWM': Swimming,
-                        'RUN': Running,
-                        'WLK': SportsWalking
-                        }
+    type_of_training: Dict[str, Training] = {'SWM': Swimming,
+                                             'RUN': Running,
+                                             'WLK': SportsWalking
+                                             }
     if workout_type in type_of_training:
         return type_of_training[workout_type](*data)
     raise KeyError('Низвестный тип тренеровки')
